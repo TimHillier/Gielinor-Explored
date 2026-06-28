@@ -8,6 +8,7 @@ import java.util.Collection;
 import javax.inject.Inject;
 import net.runelite.api.Client;
 import net.runelite.api.Perspective;
+import net.runelite.api.Player;
 import net.runelite.api.Tile;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.client.ui.overlay.Overlay;
@@ -98,9 +99,27 @@ public class gielinorExploredOverlay extends Overlay {
       }
     }
 
+    unHidePlayer(graphics, client.getLocalPlayer());
     graphics.setComposite(prevComposite);
     graphics.setClip(prevClip);
     return null;
+  }
+
+  private void unHidePlayer(Graphics2D graphics, Player player) {
+    if (player == null) {
+      return;
+    }
+
+    Shape playerShape = player.getConvexHull();
+    if (playerShape != null) {
+      graphics.fill(playerShape);
+      return;
+    }
+
+    Polygon tilePolygon = player.getCanvasTilePoly();
+    if (tilePolygon!= null) {
+      graphics.fill(tilePolygon);
+    }
   }
 
   private Color getFogColor() {
