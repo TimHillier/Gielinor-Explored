@@ -1,12 +1,7 @@
+Keep track of your path as you travel through Gielinor!
+
 # Gielinor Explored plugin
-
-A plugin for [Runelite](https://runelite.net/) that adds a fog of war effect to the game's map, revealing areas as you explore them.
-
-### Config Options
-
-- **Show Fog on World Map**: Toggle fog visibility on the full world map
-- **Show Fog on Mini Map**: Toggle fog visibility on the minimap
-- **Fog Color**: Customize the color and opacity of the fog overlay
+A plugin for [Runelite](https://runelite.net/) that adds a fog of war effect to the game's map, revealing areas as you explore them. 
 
 # Screenshots
 ### Moving Through The World
@@ -29,4 +24,3 @@ This project is licensed under the BSD-2-Clause License - see the LICENSE file f
 - Portions adapted from [Tileman-Mode](https://github.com/ConorLeckey/Tileman-Mode) (BSD 2-Clause), including tile storage and movement pathing logic
 ---
 
-**Note**: This plugin is a third-party addon and is not affiliated with or endorsed by Jagex or RuneLite.
