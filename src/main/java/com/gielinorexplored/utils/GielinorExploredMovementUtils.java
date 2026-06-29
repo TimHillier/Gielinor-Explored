@@ -45,9 +45,9 @@ import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
 
 @Singleton
-public class gielinorExploredMovementUtils {
+public class GielinorExploredMovementUtils {
   private final Client client;
-  private final gielinorExploredTileUtils tileUtils;
+  private final GielinorExploredTileUtils tileUtils;
   private final MovementFlag[] fullBlock =
       new MovementFlag[] {
         MovementFlag.BLOCK_MOVEMENT_FLOOR,
@@ -70,7 +70,7 @@ public class gielinorExploredMovementUtils {
   @Getter @Setter private int lastPlane;
 
   @Inject
-  gielinorExploredMovementUtils(Client client, gielinorExploredTileUtils tileUtils) {
+  GielinorExploredMovementUtils(Client client, GielinorExploredTileUtils tileUtils) {
     this.client = client;
     this.tileUtils = tileUtils;
   }

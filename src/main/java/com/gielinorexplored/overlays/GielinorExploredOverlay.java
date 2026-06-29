@@ -1,8 +1,8 @@
 package com.gielinorexplored.overlays;
 
-import com.gielinorexplored.gielinorExploredConfig;
-import com.gielinorexplored.gielinorExploredPlugin;
-import com.gielinorexplored.utils.gielinorExploredTileUtils;
+import com.gielinorexplored.GielinorExploredConfig;
+import com.gielinorexplored.GielinorExploredPlugin;
+import com.gielinorexplored.utils.GielinorExploredTileUtils;
 import java.awt.*;
 import java.util.Collection;
 import javax.inject.Inject;
@@ -15,16 +15,16 @@ import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
 
-public class gielinorExploredOverlay extends Overlay {
+public class GielinorExploredOverlay extends Overlay {
   private static final int MAX_DRAW_DISTANCE = 32;
   private final Client client;
-  private final gielinorExploredPlugin plugin;
-  private final gielinorExploredConfig config;
-  private final gielinorExploredTileUtils tileUtils;
+  private final GielinorExploredPlugin plugin;
+  private final GielinorExploredConfig config;
+  private final GielinorExploredTileUtils tileUtils;
 
   @Inject
-  private gielinorExploredOverlay(
-          Client client, gielinorExploredConfig config, gielinorExploredPlugin plugin, gielinorExploredTileUtils tileUtils) {
+  private GielinorExploredOverlay(
+          Client client, GielinorExploredConfig config, GielinorExploredPlugin plugin, GielinorExploredTileUtils tileUtils) {
     this.client = client;
     this.plugin = plugin;
     this.config = config;

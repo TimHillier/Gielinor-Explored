@@ -5,7 +5,7 @@ import net.runelite.client.config.*;
 
 /** Plugin Config. */
 @ConfigGroup("gielinorExplored")
-public interface gielinorExploredConfig extends Config {
+public interface GielinorExploredConfig extends Config {
 
   /** Turn Fog on or off */
   @ConfigItem(keyName = "fogshow", name = "Show Fog", description = "Show Fog")

@@ -42,7 +42,7 @@ import net.runelite.api.coords.WorldPoint;
 import net.runelite.client.config.ConfigManager;
 
 @Singleton
-public class gielinorExploredTileUtils {
+public class GielinorExploredTileUtils {
   private static final String CONFIG_GROUP = "gielinorExplored";
   private static final String DATA_PREFIX = "region_data";
   @Getter private final List<WorldPoint> exploredTiles = new ArrayList<>();
@@ -50,7 +50,7 @@ public class gielinorExploredTileUtils {
   private final ConfigManager configManager;
 
   @Inject
-  gielinorExploredTileUtils(Client client, ConfigManager configManager) {
+  GielinorExploredTileUtils(Client client, ConfigManager configManager) {
     this.client = client;
     this.configManager = configManager;
   }

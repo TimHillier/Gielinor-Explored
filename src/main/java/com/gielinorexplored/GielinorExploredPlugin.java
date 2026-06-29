@@ -17,13 +17,13 @@ import net.runelite.client.ui.overlay.OverlayManager;
 
 @Slf4j
 @PluginDescriptor(name = "Gielinor Explored")
-public class gielinorExploredPlugin extends Plugin {
+public class GielinorExploredPlugin extends Plugin {
   public int lastPlane;
-  @Inject private gielinorExploredTileUtils tileUtils;
-  @Inject private gielinorExploredMovementUtils movementUtils;
-  @Inject private gielinorExploredOverlay gielinorExploredOverlay;
-  @Inject private gielinorExploredMiniMapOverlay gielinorExploredMiniMapOverlay;
-  @Inject private gielinorExploredWorldMapOverlay gielinorExploredWorldMapOverlay;
+  @Inject private GielinorExploredTileUtils tileUtils;
+  @Inject private GielinorExploredMovementUtils movementUtils;
+  @Inject private GielinorExploredOverlay gielinorExploredOverlay;
+  @Inject private GielinorExploredMiniMapOverlay gielinorExploredMiniMapOverlay;
+  @Inject private GielinorExploredWorldMapOverlay gielinorExploredWorldMapOverlay;
   @Inject private Client client;
   @Inject private OverlayManager overlayManager;
 
@@ -47,8 +47,8 @@ public class gielinorExploredPlugin extends Plugin {
   }
 
   @Provides
-  gielinorExploredConfig provideConfig(ConfigManager configManager) {
-    return configManager.getConfig(gielinorExploredConfig.class);
+  GielinorExploredConfig provideConfig(ConfigManager configManager) {
+    return configManager.getConfig(GielinorExploredConfig.class);
   }
 
   @Subscribe

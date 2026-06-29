@@ -1,8 +1,8 @@
 package com.gielinorexplored.overlays;
 
 import com.gielinorexplored.ExploredTile;
-import com.gielinorexplored.gielinorExploredConfig;
-import com.gielinorexplored.utils.gielinorExploredTileUtils;
+import com.gielinorexplored.GielinorExploredConfig;
+import com.gielinorexplored.utils.GielinorExploredTileUtils;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import javax.inject.Inject;
@@ -14,20 +14,20 @@ import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
 
-public class gielinorExploredWorldMapOverlay extends Overlay {
+public class GielinorExploredWorldMapOverlay extends Overlay {
   private static final int REGION_SIZE = 1 << 6;
   private static final int REGION_TRUNCATE = ~((1 << 6) - 1);
   private final Client client;
-  private final gielinorExploredConfig config;
-  private final gielinorExploredTileUtils tileUtils;
+  private final GielinorExploredConfig config;
+  private final GielinorExploredTileUtils tileUtils;
   private int fogImageHeight = -1;
   private int fogImageWidth = -1;
   private BufferedImage fogBufferedImage;
   private Graphics2D fogGraphics;
 
   @Inject
-  private gielinorExploredWorldMapOverlay(
-          Client client, gielinorExploredConfig config, gielinorExploredTileUtils tileUtils) {
+  private GielinorExploredWorldMapOverlay(
+          Client client, GielinorExploredConfig config, GielinorExploredTileUtils tileUtils) {
     this.client = client;
     this.config = config;
     this.tileUtils = tileUtils;

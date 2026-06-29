@@ -2,9 +2,9 @@ package com.gielinorexplored.overlays;
 
 import static net.runelite.api.widgets.ComponentID.MINIMAP_CONTAINER;
 
-import com.gielinorexplored.gielinorExploredConfig;
-import com.gielinorexplored.gielinorExploredPlugin;
-import com.gielinorexplored.utils.gielinorExploredTileUtils;
+import com.gielinorexplored.GielinorExploredConfig;
+import com.gielinorexplored.GielinorExploredPlugin;
+import com.gielinorexplored.utils.GielinorExploredTileUtils;
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
@@ -19,23 +19,23 @@ import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
 
-public class gielinorExploredMiniMapOverlay extends Overlay {
+public class GielinorExploredMiniMapOverlay extends Overlay {
   private static final int MAX_DRAW_DISTANCE = 16;
   private static final int TILE_WIDTH = 4;
   private static final int TILE_HEIGHT = 4;
 
   private final Client client;
-  private final gielinorExploredPlugin plugin;
-  private final gielinorExploredTileUtils tileUtils;
-  private final gielinorExploredConfig config;
+  private final GielinorExploredPlugin plugin;
+  private final GielinorExploredTileUtils tileUtils;
+  private final GielinorExploredConfig config;
   private int fogImageWidth = -1;
   private int fogImageHeight = -1;
   private BufferedImage fogBufferedImage;
   private Graphics2D fogGraphics;
 
   @Inject
-  private gielinorExploredMiniMapOverlay(
-          Client client, gielinorExploredConfig config, gielinorExploredPlugin plugin, gielinorExploredTileUtils tileUtils) {
+  private GielinorExploredMiniMapOverlay(
+          Client client, GielinorExploredConfig config, GielinorExploredPlugin plugin, GielinorExploredTileUtils tileUtils) {
     this.client = client;
     this.plugin = plugin;
     this.config = config;
