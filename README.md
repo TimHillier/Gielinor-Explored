@@ -1,7 +1,8 @@
 Keep track of your path as you travel through Gielinor!
 
-# Gielinor Explored plugin [![Active Installs](https://img.shields.io/endpoint?url=https://api.runelite.net/pluginhub/shields/installs/plugin/gielinor-explored)](https://runelite.net/plugin-hub/show/gielinor-explored)
+# Gielinor Explored plugin 
 A plugin for [Runelite](https://runelite.net/) that adds a fog of war effect to the game's map, revealing areas as you explore them. 
+[![Active Installs](https://img.shields.io/endpoint?url=https://api.runelite.net/pluginhub/shields/installs/plugin/gielinor-explored)](https://runelite.net/plugin-hub/show/gielinor-explored)
 
 # Screenshots
 ### Moving Through The World
