@@ -5,7 +5,12 @@ import static net.runelite.api.widgets.ComponentID.MINIMAP_CONTAINER;
 import com.gielinorexplored.GielinorExploredConfig;
 import com.gielinorexplored.GielinorExploredPlugin;
 import com.gielinorexplored.utils.GielinorExploredTileUtils;
-import java.awt.*;
+import java.awt.AlphaComposite;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import javax.inject.Inject;
@@ -19,6 +24,9 @@ import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
 
+/**
+ * Overlay that renders the fog of war effect on the game's minimap.
+ */
 public class GielinorExploredMiniMapOverlay extends Overlay {
   private static final int MAX_DRAW_DISTANCE = 16;
   private static final int TILE_WIDTH = 4;
@@ -35,7 +43,10 @@ public class GielinorExploredMiniMapOverlay extends Overlay {
 
   @Inject
   private GielinorExploredMiniMapOverlay(
-          Client client, GielinorExploredConfig config, GielinorExploredPlugin plugin, GielinorExploredTileUtils tileUtils) {
+      Client client,
+      GielinorExploredConfig config,
+      GielinorExploredPlugin plugin,
+      GielinorExploredTileUtils tileUtils) {
     this.client = client;
     this.plugin = plugin;
     this.config = config;
@@ -98,7 +109,7 @@ public class GielinorExploredMiniMapOverlay extends Overlay {
           TILE_HEIGHT);
     }
 
-    Shape prevClip = graphics.getClip();
+    final Shape prevClip = graphics.getClip();
     graphics.setClip(minimapCircle(bounds));
     graphics.drawImage(fogBufferedImage, bounds.x, bounds.y, null);
     graphics.setClip(prevClip);

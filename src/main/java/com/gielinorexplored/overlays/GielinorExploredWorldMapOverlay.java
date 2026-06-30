@@ -3,7 +3,11 @@ package com.gielinorexplored.overlays;
 import com.gielinorexplored.ExploredTile;
 import com.gielinorexplored.GielinorExploredConfig;
 import com.gielinorexplored.utils.GielinorExploredTileUtils;
-import java.awt.*;
+import java.awt.AlphaComposite;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import javax.inject.Inject;
 import net.runelite.api.Client;
@@ -27,7 +31,7 @@ public class GielinorExploredWorldMapOverlay extends Overlay {
 
   @Inject
   private GielinorExploredWorldMapOverlay(
-          Client client, GielinorExploredConfig config, GielinorExploredTileUtils tileUtils) {
+      Client client, GielinorExploredConfig config, GielinorExploredTileUtils tileUtils) {
     this.client = client;
     this.config = config;
     this.tileUtils = tileUtils;

@@ -3,7 +3,13 @@ package com.gielinorexplored.overlays;
 import com.gielinorexplored.GielinorExploredConfig;
 import com.gielinorexplored.GielinorExploredPlugin;
 import com.gielinorexplored.utils.GielinorExploredTileUtils;
-import java.awt.*;
+import java.awt.AlphaComposite;
+import java.awt.Color;
+import java.awt.Composite;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.Polygon;
+import java.awt.Shape;
 import java.util.Collection;
 import javax.inject.Inject;
 import net.runelite.api.Client;
@@ -15,6 +21,9 @@ import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
 
+/**
+ * Overlay that renders the fog of war effect on the game's map.
+ */
 public class GielinorExploredOverlay extends Overlay {
   private static final int MAX_DRAW_DISTANCE = 32;
   private final Client client;
@@ -24,7 +33,10 @@ public class GielinorExploredOverlay extends Overlay {
 
   @Inject
   private GielinorExploredOverlay(
-          Client client, GielinorExploredConfig config, GielinorExploredPlugin plugin, GielinorExploredTileUtils tileUtils) {
+      Client client,
+      GielinorExploredConfig config,
+      GielinorExploredPlugin plugin,
+      GielinorExploredTileUtils tileUtils) {
     this.client = client;
     this.plugin = plugin;
     this.config = config;
@@ -54,8 +66,8 @@ public class GielinorExploredOverlay extends Overlay {
     int viewportW = client.getViewportWidth();
     int viewportH = client.getViewportHeight();
 
-    Shape prevClip = graphics.getClip();
-    Composite prevComposite = graphics.getComposite();
+    final Shape prevClip = graphics.getClip();
+    final Composite prevComposite = graphics.getComposite();
 
     graphics.clipRect(viewportX, viewportY, viewportW, viewportH);
 
@@ -117,7 +129,7 @@ public class GielinorExploredOverlay extends Overlay {
     }
 
     Polygon tilePolygon = player.getCanvasTilePoly();
-    if (tilePolygon!= null) {
+    if (tilePolygon != null) {
       graphics.fill(tilePolygon);
     }
   }
