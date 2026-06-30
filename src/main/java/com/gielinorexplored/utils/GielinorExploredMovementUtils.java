@@ -28,6 +28,7 @@
 // Idk how necessary this is, but I adapted their
 // movement and tile management code for this project, and I want to make sure
 // They get the credit they deserve for it.
+
 package com.gielinorexplored.utils;
 
 import java.util.Arrays;
@@ -44,6 +45,9 @@ import net.runelite.api.CollisionDataFlag;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
 
+/**
+ * Utility class for managing the player's movement and tile exploration.
+ */
 @Singleton
 public class GielinorExploredMovementUtils {
   private final Client client;
@@ -75,7 +79,9 @@ public class GielinorExploredMovementUtils {
     this.tileUtils = tileUtils;
   }
 
-  /** Adds the player's current tile to the explored tile list when they move. */
+  /**
+   * Adds the player's current tile to the explored tile list when they move.
+   */
   public void addCurrentTile() {
     final WorldPoint playerPos = client.getLocalPlayer().getWorldLocation();
     if (playerPos == null) {
@@ -95,7 +101,7 @@ public class GielinorExploredMovementUtils {
   }
 
   /**
-   * Handles tile unfilling when the player walks to a new position.
+   * Handles tile exploration when the player walks to a new position.
    *
    * @param currentPlayerPosition the player's current local position
    */
@@ -106,21 +112,21 @@ public class GielinorExploredMovementUtils {
     tileUtils.updateTileMark(currentPlayerPosition);
 
     if (lastTile != null) {
-      int xDiff = currentPlayerPosition.getX() - lastTile.getX();
-      int yDiff = currentPlayerPosition.getY() - lastTile.getY();
-      int xModifer = xDiff / 2;
-      int yModifer = yDiff / 2;
+      int diffX = currentPlayerPosition.getX() - lastTile.getX();
+      int diffY = currentPlayerPosition.getY() - lastTile.getY();
+      int halfDiffX = diffX / 2;
+      int halfDiffY = diffY / 2;
 
       switch (lastTile.distanceTo(currentPlayerPosition)) {
         case 181:
-          handleCornerMovement(xDiff, yDiff);
+          handleCornerMovement(diffX, diffY);
           break;
         case 256:
         case 362:
-          exploreTile(new LocalPoint(lastTile.getX() + xModifer, lastTile.getY() + yModifer));
+          exploreTile(new LocalPoint(lastTile.getX() + halfDiffX, lastTile.getY() + halfDiffY));
           break;
         case 286:
-          handleLMovement(xDiff, yDiff);
+          handleKnightMovement(diffX, diffY);
           break;
         case 0:
         case 128:
@@ -133,60 +139,62 @@ public class GielinorExploredMovementUtils {
   /**
    * Adds skipped tiles to the explored list when the player moves in an L-shaped path.
    *
-   * @param xDiff x distance in local coordinates between the last tile and current position
-   * @param yDiff y distance in local coordinates between the last tile and current position
+   * @param diffX x distance in local coordinates between the last tile and current position
+   * @param diffY y distance in local coordinates between the last tile and current position
    */
-  private void handleLMovement(int xDiff, int yDiff) {
-    int xModifer = xDiff / 2;
-    int yModifer = yDiff / 2;
-    int tileBesideXDiff, tileBesideYDiff;
+  private void handleKnightMovement(int diffX, int diffY) {
+    int halfDiffX = diffX / 2;
+    int halfDiffY = diffY / 2;
+    int tileBesideDiffX;
+    int tileBesideDiffY;
 
-    if (Math.abs(yDiff) == 128) {
-      tileBesideXDiff = xDiff;
-      tileBesideYDiff = 0;
+    if (Math.abs(diffY) == 128) {
+      tileBesideDiffX = diffX;
+      tileBesideDiffY = 0;
     } else {
-      tileBesideXDiff = 0;
-      tileBesideYDiff = yDiff;
+      tileBesideDiffX = 0;
+      tileBesideDiffY = diffY;
     }
 
     MovementFlag[] tileBesidesFlagsArray =
-        getTileMovementFlags(lastTile.getX() + tileBesideXDiff, lastTile.getY() + tileBesideYDiff);
+        getTileMovementFlags(lastTile.getX() + tileBesideDiffX, lastTile.getY() + tileBesideDiffY);
 
     if (tileBesidesFlagsArray.length == 0) {
       exploreTile(
           new LocalPoint(
-              lastTile.getX() + tileBesideXDiff / 2, lastTile.getY() + tileBesideYDiff / 2));
+              lastTile.getX() + tileBesideDiffX / 2, lastTile.getY() + tileBesideDiffY / 2));
     } else if (containsAnyOf(fullBlock, tileBesidesFlagsArray)) {
-      if (Math.abs(yModifer) == 64) {
-        yModifer *= 2;
-      } else if (Math.abs(xModifer) == 64) {
-        xModifer *= 2;
+      if (Math.abs(halfDiffY) == 64) {
+        halfDiffY *= 2;
+      } else if (Math.abs(halfDiffX) == 64) {
+        halfDiffX *= 2;
       }
-      exploreTile(new LocalPoint(lastTile.getX() + xModifer, lastTile.getY() + yModifer));
+      exploreTile(new LocalPoint(lastTile.getX() + halfDiffX, lastTile.getY() + halfDiffY));
     } else if (containsAnyOf(allDirections, tileBesidesFlagsArray)) {
-      MovementFlag direction1, direction2;
-      if (yDiff == 256 || yDiff == -128) {
+      MovementFlag direction1;
+      MovementFlag direction2;
+      if (diffY == 256 || diffY == -128) {
         direction1 = MovementFlag.BLOCK_MOVEMENT_SOUTH;
       } else {
         direction1 = MovementFlag.BLOCK_MOVEMENT_NORTH;
       }
-      if (xDiff == 256 || xDiff == -128) {
+      if (diffX == 256 || diffX == -128) {
         direction2 = MovementFlag.BLOCK_MOVEMENT_WEST;
       } else {
         direction2 = MovementFlag.BLOCK_MOVEMENT_EAST;
       }
 
       if (containsAnyOf(tileBesidesFlagsArray, new MovementFlag[] {direction1, direction2})) {
-        if (yModifer == 64) {
-          yModifer = 128;
-        } else if (xModifer == 64) {
-          xModifer = 128;
+        if (halfDiffY == 64) {
+          halfDiffY = 128;
+        } else if (halfDiffX == 64) {
+          halfDiffX = 128;
         }
-        exploreTile(new LocalPoint(lastTile.getX() + xModifer, lastTile.getY() + yModifer));
+        exploreTile(new LocalPoint(lastTile.getX() + halfDiffX, lastTile.getY() + halfDiffY));
       } else {
         exploreTile(
             new LocalPoint(
-                lastTile.getX() + tileBesideXDiff / 2, lastTile.getY() + tileBesideYDiff / 2));
+                lastTile.getX() + tileBesideDiffX / 2, lastTile.getY() + tileBesideDiffY / 2));
       }
     }
   }
@@ -195,25 +203,25 @@ public class GielinorExploredMovementUtils {
    * Adds skipped tiles to the explore list when the player moves diagonally and skips intermediate
    * tiles.
    *
-   * @param xDiff x distance in local coordinates between the last tile and current position
-   * @param yDiff y distance in local coordinates between the last tile and current position
+   * @param diffX x distance in local coordinates between the last tile and current position
+   * @param diffY y distance in local coordinates between the last tile and current position
    */
-  private void handleCornerMovement(int xDiff, int yDiff) {
+  private void handleCornerMovement(int diffX, int diffY) {
     LocalPoint northPoint;
     LocalPoint southPoint;
 
-    if (yDiff > 0) {
-      northPoint = new LocalPoint(lastTile.getX(), lastTile.getY() + yDiff);
-      southPoint = new LocalPoint(lastTile.getX() + xDiff, lastTile.getY());
+    if (diffY > 0) {
+      northPoint = new LocalPoint(lastTile.getX(), lastTile.getY() + diffY);
+      southPoint = new LocalPoint(lastTile.getX() + diffX, lastTile.getY());
     } else {
-      northPoint = new LocalPoint(lastTile.getX() + xDiff, lastTile.getY());
-      southPoint = new LocalPoint(lastTile.getX(), lastTile.getY() + yDiff);
+      northPoint = new LocalPoint(lastTile.getX() + diffX, lastTile.getY());
+      southPoint = new LocalPoint(lastTile.getX(), lastTile.getY() + diffY);
     }
 
     MovementFlag[] northTile = getTileMovementFlags(northPoint);
     MovementFlag[] southTile = getTileMovementFlags(southPoint);
 
-    if (xDiff + yDiff == 0) {
+    if (diffX + diffY == 0) {
       if (containsAnyOf(fullBlock, northTile)
           || containsAnyOf(
               northTile,
@@ -331,6 +339,8 @@ public class GielinorExploredMovementUtils {
     @Getter private int flag;
 
     /**
+     * Returns the set of movement flags present in the given collision data.
+     *
      * @param collisionData The tile collision flags.
      * @return The set of {@link MovementFlag}s that have been set.
      */

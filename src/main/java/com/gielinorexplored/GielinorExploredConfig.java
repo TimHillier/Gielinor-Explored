@@ -1,19 +1,22 @@
 package com.gielinorexplored;
 
-import java.awt.*;
-import net.runelite.client.config.*;
+import java.awt.Color;
+import net.runelite.client.config.Alpha;
+import net.runelite.client.config.Config;
+import net.runelite.client.config.ConfigGroup;
+import net.runelite.client.config.ConfigItem;
 
 /** Plugin Config. */
 @ConfigGroup("gielinorExplored")
 public interface GielinorExploredConfig extends Config {
 
-  /** Turn Fog on or off */
+  /** Turn Fog on or off. */
   @ConfigItem(keyName = "fogshow", name = "Show Fog", description = "Show Fog")
   default boolean enableFog() {
     return true;
   }
 
-  /** Toggles to show Fog on map */
+  /** Toggles to show Fog on map. */
   @ConfigItem(
       keyName = "mapshow",
       name = "Show Fog on World Map",
@@ -22,7 +25,7 @@ public interface GielinorExploredConfig extends Config {
     return true;
   }
 
-  /** Toggles to show Fog on minimap */
+  /** Toggles to show Fog on minimap. */
   @ConfigItem(
       keyName = "minimapshow",
       name = "Show Fog on Mini Map",
@@ -31,7 +34,7 @@ public interface GielinorExploredConfig extends Config {
     return true;
   }
 
-  /** Option for Fog Color */
+  /** Option for Fog Color. */
   @Alpha
   @ConfigItem(
       keyName = "fogColor",

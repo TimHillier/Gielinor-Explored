@@ -18,6 +18,9 @@ import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
 
+/**
+ * Overlay that renders the fog of war effect on the game's world map.
+ */
 public class GielinorExploredWorldMapOverlay extends Overlay {
   private static final int REGION_SIZE = 1 << 6;
   private static final int REGION_TRUNCATE = ~((1 << 6) - 1);
@@ -69,18 +72,18 @@ public class GielinorExploredWorldMapOverlay extends Overlay {
     int tileHeight = (int) Math.ceil(worldMapRectangle.getHeight() / pixelsPerTile);
     Point worldMapPosition = client.getWorldMap().getWorldMapPosition();
 
-    int yTileMin = worldMapPosition.getY() - tileHeight / 2;
-    int xRegionMin = (worldMapPosition.getX() - tileWidth / 2) & REGION_TRUNCATE;
-    int xRegionMax = ((worldMapPosition.getX() + tileWidth / 2) & REGION_TRUNCATE) + REGION_SIZE;
-    int yRegionMin = (yTileMin & REGION_TRUNCATE);
-    int yRegionMax = ((worldMapPosition.getY() + tileHeight / 2) & REGION_TRUNCATE) + REGION_SIZE;
+    int tileMinY = worldMapPosition.getY() - tileHeight / 2;
+    int regionMinX = (worldMapPosition.getX() - tileWidth / 2) & REGION_TRUNCATE;
+    int regionMaxX = ((worldMapPosition.getX() + tileWidth / 2) & REGION_TRUNCATE) + REGION_SIZE;
+    int regionMinY = (tileMinY & REGION_TRUNCATE);
+    int regionMaxY = ((worldMapPosition.getY() + tileHeight / 2) & REGION_TRUNCATE) + REGION_SIZE;
     int regionPixelSize = (int) Math.ceil(REGION_SIZE * pixelsPerTile);
 
     // Clear Fog.
     fogGraphic.setComposite(AlphaComposite.Clear);
 
-    for (int x = xRegionMin; x < xRegionMax; x += REGION_SIZE) {
-      for (int y = yRegionMin; y < yRegionMax; y += REGION_SIZE) {
+    for (int x = regionMinX; x < regionMaxX; x += REGION_SIZE) {
+      for (int y = regionMinY; y < regionMaxY; y += REGION_SIZE) {
         int regionId = ((x >> 6) << 8) | (y >> 6);
         int plane = client.getTopLevelWorldView().getPlane();
 
@@ -88,18 +91,18 @@ public class GielinorExploredWorldMapOverlay extends Overlay {
           if (tile.getPlane() != plane) {
             continue;
           }
-          int yTileOffset = -(yTileMin - y) + 2;
-          int xTileOffset = x + tileWidth / 2 - worldMapPosition.getX();
+          int tileOffsetY = -(tileMinY - y) + 2;
+          int tileOffsetX = x + tileWidth / 2 - worldMapPosition.getX();
 
-          int xPos = ((int) (xTileOffset * pixelsPerTile));
-          int yPos = (worldMapRectangle.height - (int) (yTileOffset * pixelsPerTile));
+          int pixelX = ((int) (tileOffsetX * pixelsPerTile));
+          int pixelY = (worldMapRectangle.height - (int) (tileOffsetY * pixelsPerTile));
 
           int size = (regionPixelSize / (64 - Math.round(48f * ((8f - pixelsPerTile) / 7f))));
           int tileSize = regionPixelSize / 64;
 
           fogGraphic.fillRect(
-              xPos + (tile.getRegionX() * tileSize),
-              yPos - (tile.getRegionY() * tileSize) + tileSize,
+              pixelX + (tile.getRegionX() * tileSize),
+              pixelY - (tile.getRegionY() * tileSize) + tileSize,
               size - 1,
               size - 1);
         }
