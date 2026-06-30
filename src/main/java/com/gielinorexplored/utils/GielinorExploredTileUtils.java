@@ -28,10 +28,16 @@
 // Idk how necessary this is, but I adapted their
 // movement and tile management code for this project, and I want to make sure
 // They get the credit they deserve for it.
+
 package com.gielinorexplored.utils;
 
 import com.gielinorexplored.ExploredTile;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.BitSet;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -41,6 +47,9 @@ import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.client.config.ConfigManager;
 
+/**
+ * Utility class for managing the explored tiles on the game's map and world map.
+ */
 @Singleton
 public class GielinorExploredTileUtils {
   private static final String CONFIG_GROUP = "gielinorExplored";
@@ -55,6 +64,12 @@ public class GielinorExploredTileUtils {
     this.configManager = configManager;
   }
 
+  /**
+   * Translates the given points to world points.
+   *
+   * @param points the points to translate
+   * @return the translated points
+   */
   private Collection<WorldPoint> translateToWorldPoint(Collection<ExploredTile> points) {
     if (points.isEmpty()) {
       return Collections.EMPTY_LIST;
@@ -74,6 +89,13 @@ public class GielinorExploredTileUtils {
         .collect(Collectors.toList());
   }
 
+  /**
+   * Decodes the tiles for the given region and plane.
+   *
+   * @param regionId the region ID
+   * @param plane the plane
+   * @return the decoded tiles
+   */
   private Collection<ExploredTile> decodeTiles(int regionId, int plane) {
     List<ExploredTile> exploredTileList = new ArrayList<>();
     String key = getKey(regionId, plane);
@@ -99,18 +121,38 @@ public class GielinorExploredTileUtils {
     return exploredTileList;
   }
 
+  /**
+   * Returns the key for the given region and plane.
+   *
+   * @param regionId the region ID
+   * @param plane the plane
+   * @return the key
+   */
   private String getKey(int regionId, int plane) {
     return DATA_PREFIX + "_" + regionId + "_" + plane;
   }
 
+  /**
+   * Returns the explored tiles for the given region and plane.
+   *
+   * @param regionId the region ID
+   * @param plane the plane
+   * @return the explored tiles
+   */
   public Collection<ExploredTile> getTiles(int regionId, int plane) {
     return decodeTiles(regionId, plane);
   }
 
+  /**
+   * Clears the explored tiles.
+   */
   public void clearExploredTiles() {
     exploredTiles.clear();
   }
 
+  /**
+   * Updates the explored tiles.
+   */
   public void updateExploredTiles() {
     exploredTiles.clear();
 
@@ -126,6 +168,11 @@ public class GielinorExploredTileUtils {
     }
   }
 
+  /**
+   * Updates the tile mark for the given local point.
+   *
+   * @param localPoint the local point to update
+   */
   public void updateTileMark(LocalPoint localPoint) {
     int plane = client.getTopLevelWorldView().getPlane();
     WorldPoint worldPoint = WorldPoint.fromLocalInstance(client, localPoint);
@@ -141,11 +188,24 @@ public class GielinorExploredTileUtils {
     }
   }
 
+  /**
+   * Adds the tiles for the given region and plane.
+   *
+   * @param tiles the tiles to add
+   * @param regionId the region ID
+   * @param plane the plane
+   */
   private void addTiles(Collection<ExploredTile> tiles, int regionId, int plane) {
     String key = getKey(regionId, plane);
     encodeTiles(tiles, key);
   }
 
+  /**
+   * Encodes and saves the tiles to the config manager.
+   *
+   * @param tiles the tiles to encode and save
+   * @param key the key to save the tiles under
+   */
   private void encodeTiles(Collection<ExploredTile> tiles, String key) {
     if (tiles == null || tiles.isEmpty()) {
       configManager.unsetConfiguration(CONFIG_GROUP, key);
